@@ -1,0 +1,14 @@
+# Set Server port
+server.port=8787
+
+# Encoding set
+server.servlet.encoding.charset=UTF-8
+server.servlet.encoding.force=true
+
+spring.mvc.static-path-pattern=/resources/**
+
+# Datasource Setup
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.datasource.url=jdbc:mariadb://175.197.9.247:3306/fourtunes
+spring.datasource.username=remotefourtunes
+spring.datasource.password=remote26

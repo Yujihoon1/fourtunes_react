@@ -1,0 +1,68 @@
+import React, { useEffect, useState, useRef } from "react";
+import { Chart, registerables } from "chart.js";
+
+const piechart = () => {
+  const chartRef = useRef(null);
+  const [chartData, setChartData] = useState(null);
+
+  useEffect(() => {
+    // Chart.js 모듈 등록
+    // 모듈 등록 같은 경우 Chart.js의 버젼이 4.xx인 경우에 필요한 것
+    //Chart.register의 형태로 모듈 등록을 해줘야지 제대로 돌아간다.
+    //2.xx , 3.xx의 경우 또 구현 방식이 달라지므로 주의할것
+    Chart.register(...registerables);
+
+    // 임의의 통계 데이터
+    const statisticsData = {
+      labels: ["Dark Blue", "Purple", "Lavender"],
+      values: [30, 20, 50],
+    };
+
+    setChartData(statisticsData);
+  }, []);
+
+  useEffect(() => {
+    if (chartData) {
+      // Chart.js 설정
+      const ctx = chartRef.current.getContext("2d");
+
+      //options 안에서 여러 설정들 가능하다
+      const options = {
+        //chart.js의 그래프는 부모 요소의 크기에 따라 자동으로 크기가 조정되는 반응형 그래프
+        //maintainAspectRatio를 false로 설정하면 그래프는 가로 너비와 세로 높이를 독립적으로 조정할 수 있음
+        //부모 요소의 크기에 맞게 그래프가 변형될 수 있다.
+
+        //maintainAspectRatio를 true로 설정하면 그래프의 가로 너비와 세로 높이의 비율이 고정
+        //그래프가 부모 요소의 크기에 맞게 조정되면서도 가로와 세로의 비율이 유지
+        maintainAspectRatio: false,
+        // 다른 설정들...
+      };
+
+      new Chart(ctx, {
+        type: "pie",
+        data: {
+          labels: chartData.labels,
+          datasets: [
+            {
+              data: chartData.values,
+              backgroundColor: [
+                "rgb(29, 38, 125)",
+                "rgb(92, 70, 156)",
+                "rgb(212, 173, 252)",
+              ],
+            },
+          ],
+        },
+        options: options,
+      });
+    }
+  }, [chartData]);
+
+  return (
+    <div>
+      <canvas ref={chartRef} width="400" height="400"></canvas>
+    </div>
+  );
+};
+
+export default piechart;
